@@ -1,5 +1,10 @@
 pipeline {
-  
+  agent any
+    environment {
+        CREATE_SCHEMA = "true"
+        DATABASE_URI = credentials("DATABASE_URI")
+        SECRET_KEY = credentials("SECRET_KEY")
+    }
   options {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
@@ -7,6 +12,21 @@ pipeline {
     DOCKERHUB_CREDENTIALS = credentials('rihamm80-dockerhub')
   }
   stages {
+    stage('setup') {
+            steps {
+                sh ' bash ./setup.sh'
+            } //steps close
+       }
+    stage('Database creation') {
+            steps {
+                script{
+                    if (env.CREATE_SCHEMA == "true") {
+                        sh ' bash database.sh'
+                    }
+                }
+
+            }
+        }
     stage('Build') {
       steps {
         sh 'docker build -t riham80/rabdalla:latest .'
