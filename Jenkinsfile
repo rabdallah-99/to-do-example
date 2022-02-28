@@ -1,15 +1,13 @@
 pipeline {
   agent any
-    environment {
-        CREATE_SCHEMA = "true"
-        DATABASE_URI = credentials("DATABASE_URI")
-        SECRET_KEY = credentials("SECRET_KEY")
-    }
-  options {
+      options {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
   environment {
     DOCKERHUB_CREDENTIALS = credentials('rihamm80-dockerhub')
+    CREATE_SCHEMA = "true"
+        DATABASE_URI = credentials("DATABASE_URI")
+        SECRET_KEY = credentials("SECRET_KEY")
   }
   stages {
     stage('setup') {
