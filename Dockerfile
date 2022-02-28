@@ -1,9 +1,7 @@
 FROM python:3.8
 WORKDIR /app
-RUN sudo install pip3 
+RUN pip3 install -r requirements.txt
 
 COPY . /app
-
-RUN pip3 install -r requirements.txt
 EXPOSE 5000
 ENTRYPOINT ["python3","app.py"]
